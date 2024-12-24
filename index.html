@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма для збереження кук</title>
+</head>
+<body>
+    <h1>Форма для збереження куки</h1>
+    <form id="cookieForm">
+        <label for="name">Ім'я:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="age">Вік:</label>
+        <input type="number" id="age" name="age" required><br><br>
+
+        <label for="days">Дні зберігання куки:</label>
+        <input type="number" id="days" name="days" required><br><br>
+
+        <button type="button" onclick="setCookies()">Встановити куки</button>
+    </form>
+
+    <script>
+        function setCookies() {
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const days = document.getElementById('days').value;
+
+            if (name && age && days) {
+                const now = new Date();
+                now.setTime(now.getTime() + (days * 24 * 60 * 60 * 1000)); // Розрахунок часу спливання
+                const expires = "expires=" + now.toUTCString();
+
+                document.cookie = `name=${name}; ${expires}; path=/`;
+                document.cookie = `age=${age}; ${expires}; path=/`;
+
+                alert("Куки успішно встановлені!");
+                location.reload(); // Перезавантажити сторінку для відображення кук
+            } else {
+                alert("Будь ласка, заповніть усі поля!");
+            }
+        }
+
+        // Перевіряємо наявність кук і виводимо їх
+        const cookies = document.cookie;
+        if (cookies) {
+            const cookieArray = cookies.split('; ').reduce((acc, current) => {
+                const [key, value] = current.split('=');
+                acc[key] = value;
+                return acc;
+            }, {});
+
+            if (cookieArray.name && cookieArray.age) {
+                document.write(`<p>Ім'я: ${cookieArray.name}</p>`);
+                document.write(`<p>Вік: ${cookieArray.age}</p>`);
+            }
+        }
+    </script>
+</body>
+</html>
